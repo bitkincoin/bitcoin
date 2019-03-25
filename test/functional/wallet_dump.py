@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# Copyright (c) 2016-2018 The Bitcoin Core developers
+# Copyright (c) 2016-2018 The Bitkincoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the dumpwallet RPC."""
 
 import os
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import BitkincoinTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
@@ -81,7 +81,7 @@ def read_dump(file_name, addrs, script_addrs, hd_master_addr_old):
         return found_addr, found_script_addr, found_addr_chg, found_addr_rsv, hd_master_addr_ret, witness_addr_ret
 
 
-class WalletDumpTest(BitcoinTestFramework):
+class WalletDumpTest(BitkincoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
         self.extra_args = [["-keypool=90", "-addresstype=legacy", "-deprecatedrpc=addwitnessaddress"]]
@@ -128,7 +128,8 @@ class WalletDumpTest(BitcoinTestFramework):
         assert_equal(witness_addr_ret, witness_addr)  # p2sh-p2wsh address added to the first key
 
         #encrypt wallet, restart, unlock and dump
-        self.nodes[0].encryptwallet('test')
+        self.nodes[0].node_encrypt_wallet('test')
+        self.start_node(0)
         self.nodes[0].walletpassphrase('test', 10)
         # Should be a no-op:
         self.nodes[0].keypoolrefill()

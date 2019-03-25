@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2018 The Bitcoin Core developers
+# Copyright (c) 2014-2018 The Bitkincoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the wallet keypool and interaction with wallet encryption/locking."""
 
 import time
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import BitkincoinTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error
 
-class KeyPoolTest(BitcoinTestFramework):
+class KeyPoolTest(BitkincoinTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
 
@@ -25,7 +25,9 @@ class KeyPoolTest(BitcoinTestFramework):
         assert(addr_before_encrypting_data['hdseedid'] == wallet_info_old['hdseedid'])
 
         # Encrypt wallet and wait to terminate
-        nodes[0].encryptwallet('test')
+        nodes[0].node_encrypt_wallet('test')
+        # Restart node 0
+        self.start_node(0)
         # Keep creating keys
         addr = nodes[0].getnewaddress()
         addr_data = nodes[0].getaddressinfo(addr)
